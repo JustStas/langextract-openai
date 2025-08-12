@@ -1,4 +1,4 @@
-# Copyright 2025 Google LLC.
+# Copyright 2025 [Stanislav Nosulenko]
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,6 +28,13 @@ dependencies = [
     "openai>=1.35.0",
 ]
 
+classifiers = [
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+]
+
 # Register the provider with LangExtract's plugin system
 [project.entry-points."langextract.providers"]
 openai = "langextract_openai:OpenAILanguageModel"
@@ -36,3 +43,9 @@ azure_openai = "langextract_openai:AzureOpenAILanguageModel"
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["langextract_openai*"]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+"" = ["LICENSE", "README.md"]
