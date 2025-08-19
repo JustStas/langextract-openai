@@ -20,8 +20,8 @@ langextract-openai/
 │   ├── __init__.py                  # Package initialization and exports
 │   └── openai_providers.py         # OpenAI and Azure OpenAI providers
 ├── examples/                        # Usage examples
-│   └── basic_usage.py              # Basic usage demonstration
-└── test_openai_provider.py         # Test script
+│   └── usage_examples.ipynb        # Jupyter notebook with examples
+└── LICENSE
 ```
 
 ## Provider Implementations
@@ -61,14 +61,10 @@ cd langextract-openai
 # Install in development mode
 pip install -e .
 
-# Test the providers
-./run_with_venv.sh test_openai_provider.py
-
-# Run examples
-./run_with_venv.sh examples/basic_usage.py
+# Run the example notebook
+# (ensure you have Jupyter installed: pip install jupyter)
+jupyter notebook examples/usage_examples.ipynb
 ```
-
-**Note**: The `run_with_venv.sh` script sets up the correct Python path to use both the latest langextract and this plugin.
 
 ## Quick Start
 
@@ -77,24 +73,27 @@ pip install -e .
 ```python
 import langextract as lx
 
-# Create OpenAI model
-config = lx.factory.ModelConfig(
-    model_id="gpt-4o-mini",
-    provider="OpenAILanguageModel",
-    provider_kwargs={"api_key": "your-openai-api-key"},
-)
-model = lx.factory.create_model(config)
-
-# Extract structured data
+# Extract structured data with OpenAI
 result = lx.extract(
     text_or_documents="John Smith is a software engineer at Tech Corp.",
-    model=model,
+    model_id="gpt-4o-mini",
+    api_key="your-openai-api-key",
     prompt_description="Extract person's name, job title, and company",
     examples=[{
         "input": "Jane Doe works as a data scientist at DataCorp.",
         "output": {"name": "Jane Doe", "job_title": "data scientist", "company": "DataCorp"}
     }]
 )
+
+# Tip: If there are multiple providers matching your model_id in your environment,
+# you can disambiguate by explicitly specifying the provider name:
+# result = lx.extract(
+#     text_or_documents="...",
+#     model_id="gpt-4o-mini",
+#     api_key="...",
+#     provider="OpenAILanguageModel",
+#     prompt_description="...",
+# )
 ```
 
 ### Azure OpenAI
@@ -102,19 +101,14 @@ result = lx.extract(
 ```python
 import langextract as lx
 
-# Create Azure OpenAI model
-config = lx.factory.ModelConfig(
+# Extract with Azure OpenAI
+result = lx.extract(
+    text_or_documents="John Smith is a software engineer at Tech Corp.",
     model_id="azure:your-deployment-name",
-    provider="AzureOpenAILanguageModel",
-    provider_kwargs={
-        "api_key": "your-azure-api-key",
-        "azure_endpoint": "https://your-resource.openai.azure.com",
-    },
+    api_key="your-azure-api-key",
+    azure_endpoint="https://your-resource.openai.azure.com",
+    prompt_description="Extract person's name, job title, and company",
 )
-model = lx.factory.create_model(config)
-
-# Use the same way as OpenAI
-result = lx.extract(text_or_documents="...", model=model, ...)
 ```
 
 ## Environment Variables
@@ -125,6 +119,36 @@ Set these environment variables for the examples and tests:
 - `AZURE_OPENAI_API_KEY`: Your Azure OpenAI API key
 - `AZURE_OPENAI_ENDPOINT`: Your Azure OpenAI endpoint URL
 - `AZURE_OPENAI_DEPLOYMENT`: Your Azure deployment name (optional, defaults to 'gpt-4o-mini')
+
+## Release
+
+1. Bump version in `pyproject.toml` under `[project] version`.
+
+2. Build and upload to PyPI:
+
+```bash
+python -m pip install --upgrade build twine
+rm -rf dist build *.egg-info
+python -m build
+twine upload dist/*
+```
+
+Optional: Upload to TestPyPI first:
+
+```bash
+twine upload --repository testpypi dist/*
+```
+
+Optional: Tag the release in git:
+
+```bash
+git tag vX.Y.Z
+git push origin vX.Y.Z
+```
+
+Notes:
+- Use a PyPI API token (username: `__token__`, password: your token), or configure `~/.pypirc`.
+- Ensure you have a clean tree and tests/examples pass before publishing.
 
 ## License
 
