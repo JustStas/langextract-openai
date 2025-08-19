@@ -41,21 +41,21 @@ This entry point allows LangExtract to automatically discover your provider.
 
 ## Installation
 
-### Prerequisites
-
-First install the latest LangExtract from source:
+### From PyPI (Recommended)
 
 ```bash
-git clone https://github.com/google/langextract.git
-cd langextract
-pip install -e .
+pip install langextract-openai
 ```
 
-### Install Plugin
+This will automatically install LangExtract and all required dependencies.
+
+### From Source (Development)
+
+If you want to contribute or modify the plugin:
 
 ```bash
 # Clone this plugin
-git clone <this-repo-url>
+git clone https://github.com/JustStas/langextract-openai.git
 cd langextract-openai
 
 # Install in development mode
