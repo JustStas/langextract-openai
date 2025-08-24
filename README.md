@@ -1,5 +1,7 @@
 # LangExtract OpenAI Plugin
 
+> Note: We recommend using the LiteLLM provider instead — it covers all OpenAI functionality and will be more actively supported. See `langextract-litellm` ([GitHub](https://github.com/JustStas/langextract-litellm)).
+
 OpenAI and Azure OpenAI provider plugin for LangExtract that enables structured data extraction using OpenAI's language models.
 
 ## Features
